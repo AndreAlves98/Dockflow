@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corsul DockFlow - Agendamentos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- 1. SIDEBAR -->
+    <aside class="sidebar">
+        <a href="#" class="sidebar-logo" data-page="dashboard">
+            <div class="logo-icon">🚚</div>
+            <div class="logo-text">
+                <h1>Corsul DockFlow</h1>
+                <p>Agendamento de Descarga</p>
+            </div>
+        </a>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-label">Operação</div>
+
+                <a href="#" class="nav-item" data-page="agendar">
+                    <span class="ni">📥</span> Agendar Descarga
+                </a>
+
+                <a href="#" class="nav-item" data-page="cancelar">
+                    <span class="ni">❌</span> Cancelar Agendamento
+                </a>
+
+                <!-- Marcado como active por padrão, já que é a tela inicial -->
+                <a href="#" class="nav-item active" data-page="agendamentos">
+                    <span class="ni">📋</span> Meus Agendamentos
+                </a>
+            </div>
+        </nav>
+    </aside>
+    <!-- SIDEBAR -->
+
+    <!-- 2. MAIN CONTAINER -->
+    <div class="main">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h2 id="topbar-title">Meus Agendamentos</h2>
+            </div>
+            <div class="topbar-right" id="topbar-actions"></div>
+        </div>
+
+        <!-- 3. PÁGINAS (Sections) -->
+
+        <!-- Tela: Meus Agendamentos -->
+        <section class="page active" id="page-agendamentos">
+            <div class="card">
+                <div class="card-hd">
+                    <h3>Todos os agendamentos</h3>
+                    <div class="filters-container">
+                        <div class="search-wrap">🔍 <input type="text" id="ag-search"
+                                placeholder="Protocolo, transportadora…" oninput="renderAgendamentos()"></div>
+                        <select class="sel-filter" id="ag-filter-status" onchange="renderAgendamentos()">
+                            <option value="">Todos status</option>
+                            <option value="agendado">Agendado</option>
+                            <option value="confirmado">Confirmado</option>
+                            <option value="descarga">Em descarga</option>
+                            <option value="concluido">Concluído</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                        <input type="date" id="ag-filter-data" class="date-filter" onchange="renderAgendamentos()">
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Protocolo</th>
+                            <th>Data</th>
+                            <th>Hora</th>
+                            <th>Doca</th>
+                            <th>NFs</th>
+                            <th>Pedido de Compra</th>
+                            <th>Transportadora</th>
+                            <th>Fornecedor</th>
+                            <th>Veículo</th>
+                            <th>Status</th>
+                            <th>Motorista</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ag-tbody"></tbody>
+                </table>
+
+                <div id="ag-empty" class="empty hidden">
+                    <div class="eico">📋</div>
+                    <p>Nenhum agendamento encontrado.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Tela: NOVO AGENDAMENTO -->
+        <section class="page" id="page-agendar">
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <div class="card-hd">
+                    <h3 id="modal-ag-title">Novo Agendamento</h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-sec">Dados do Transporte</div>
+
+                        <div class="fg">
+                            <label>Transportadora </label>
+                            <input id="ag-transp" placeholder="Nome da Transportadora"></input>
+                        </div>
+
+                        <div class="fg">
+                            <label>Fornecedor / Remetente *</label>
+                            <input id="ag-forn" placeholder="Nome do Fornecedor / Remetente"></input>
+                        </div>
+
+
+                        <div class="fg">
+                            <label>Motorista *</label>
+                            <input type="text" id="ag-motorista" placeholder="Nome completo">
+                        </div>
+
+                        <div class="fg">
+                            <label>Telefone *</label>
+                            <input type="text" id="ag-telefone" placeholder="Ex: (048) 99999-9999">
+                        </div>
+
+                        <div class="fg">
+                            <label>E-mail *</label>
+                            <input type="email" id="ag-email" placeholder="E-mail de Contato">
+                        </div>
+
+                        <div class="fg">
+                            <label>Placa do veículo *</label>
+                            <input type="text" id="ag-placa" placeholder="ABC-1234" style="text-transform:uppercase"
+                                oninput="this.value=this.value.toUpperCase()">
+                        </div>
+
+                        <div class="fg">
+                            <label>Tipo de veículo</label>
+                            <select id="ag-veiculo">
+                                <option value="">Selecione…</option>
+                                <option value="truck">Truck</option>
+                                <option value="carreta">Carreta</option>
+                                <option value="bitrem">Furgão</option>
+                                <option value="van">Van</option>
+                                <option value="toco">Toco</option>
+                            </select>
+                        </div>
+
+                        <hr class="form-sep">
+                        <div class="form-sec">Agendamento</div>
+
+                        <div class="fg">
+                            <label>Data *</label>
+                            <input type="date" id="ag-data">
+                        </div>
+
+                        <div class="fg">
+                            <label>Doca *</label>
+                            <select id="ag-doca">
+                                <option value="">Selecione…</option>
+                                <option value="doca01">DOCA 01</option>
+                                <option value="doca02">DOCA 02</option>
+                                <option value="doca03">DOCA 03</option>
+                            </select>
+                        </div>
+
+                        <div class="fg">
+                            <label>Horário *</label>
+                            <input type="time" id="ag-hora-ini">
+                        </div>
+
+                        <div class="fg">
+                            <label>Tipo de carga</label>
+                            <select id="ag-tipo-carga">
+                                <option value="">Selecione…</option>
+                                <option value="palete">Paletizada</option>
+                                <option value="fracionada">Fracionada</option>
+                                <option value="perigosa">Carga perigosa</option>
+                            </select>
+                        </div>
+
+                        <div class="fg">
+                            <label>Peso estimado (kg)</label>
+                            <input type="number" id="ag-peso" placeholder="0" min="0">
+                        </div>
+
+                        <div class="fg">
+                            <label>Pedido de Compra</label>
+                            <input type="text" id="ag-pedido" placeholder="Ex: 123456">
+                        </div>
+
+                        <div class="fg span2">
+                            <label>Observações</label>
+                            <textarea id="ag-obs" placeholder="Instruções especiais, restrições…"></textarea>
+                        </div>
+
+                        <hr class="form-sep">
+                        <div class="form-sec">Notas Fiscais / Manifesto</div>
+                    </div>
+
+                    <div class="nf-list" id="nf-list"></div>
+                    <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="addNF()">+ Adicionar
+                        NF</button>
+                </div>
+
+                <div class="modal-ft">
+                    <button class="btn btn-outline" onclick="navTo('dashboard')">Voltar</button>
+                    <button class="btn btn-primary" onclick="salvarAg()">Salvar agendamento</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela: CANCELAR AGENDAMENTO -->
+        <section class="page" id="page-cancelar">
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <div class="card-hd">
+                    <h3 id="modal-ag-title">Cancelar Agendamento</h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-sec">Localizar Agendamento</div>
+
+                        <div class="fg">
+                            <label>Número do Protocolo *</label>
+                            <input type="text" id="canc-protocolo" placeholder="Ex: AG-001234">
+                        </div>
+
+                        <hr class="form-sep">
+                        <div class="form-sec">Detalhes do Cancelamento</div>
+
+                        <div class="fg">
+                            <label>Motivo do Cancelamento *</label>
+                            <select id="canc-motivo">
+                                <option value="">Selecione o motivo…</option>
+                                <option value="atraso">Atraso na viagem / Quebra do veículo</option>
+                                <option value="documentacao">Problema na documentação / NF</option>
+                                <option value="reagendamento">Necessidade de reagendar para outra data</option>
+                                <option value="cancelado_fornecedor">Carga cancelada pelo fornecedor</option>
+                                <option value="erro_digitacao">Erro de digitação no agendamento</option>
+                                <option value="outro">Outro motivo</option>
+                            </select>
+                        </div>
+
+                        <div class="fg span2">
+                            <label>Justificativa / Observações *</label>
+                            <textarea id="canc-obs" placeholder="Descreva os detalhes do cancelamento…"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-ft">
+                        <button class="btn btn-outline" onclick="navTo('dashboard')">Voltar</button>
+                        <button class="btn btn-primary" style="background-color: var(--red); border-color: var(--red);"
+                            onclick="confirmarCancelamento()">Confirmar Cancelamento</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- O JavaScript é carregado apenas uma vez, no final da página -->
+    <script src="script.js"></script>
+</body>
+
+</html>
