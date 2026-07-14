@@ -9,8 +9,11 @@
 </head>
 
 <body>
+    <!-- OVERLAY PARA MOBILE -->
+    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
+
     <!-- 1. SIDEBAR -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <a href="#" class="sidebar-logo" data-page="dashboard">
             <div class="logo-icon">🚚</div>
             <div class="logo-text">
@@ -22,43 +25,40 @@
         <nav>
             <div class="nav-section">
                 <div class="nav-label">Operação</div>
-
                 <a href="#" class="nav-item" data-page="agendar">
                     <span class="ni">📥</span> Agendar Descarga
                 </a>
-
                 <a href="#" class="nav-item" data-page="cancelar">
                     <span class="ni">❌</span> Cancelar Agendamento
                 </a>
-
-                <!-- Marcado como active por padrão, já que é a tela inicial -->
                 <a href="#" class="nav-item active" data-page="agendamentos">
                     <span class="ni">📋</span> Meus Agendamentos
                 </a>
             </div>
         </nav>
     </aside>
-    <!-- SIDEBAR -->
 
     <!-- 2. MAIN CONTAINER -->
     <div class="main">
         <div class="topbar">
             <div class="topbar-left">
+                <!-- BOTÃO HAMBURGER PARA MOBILE -->
+                <div class="menu-toggle" onclick="toggleMenu()">☰</div>
                 <h2 id="topbar-title">Meus Agendamentos</h2>
             </div>
             <div class="topbar-right" id="topbar-actions"></div>
         </div>
 
         <!-- 3. PÁGINAS (Sections) -->
-
-        <!-- Tela: Meus Agendamentos -->
         <section class="page active" id="page-agendamentos">
             <div class="card">
                 <div class="card-hd">
                     <h3>Todos os agendamentos</h3>
                     <div class="filters-container">
-                        <div class="search-wrap">🔍 <input type="text" id="ag-search"
-                                placeholder="Protocolo, transportadora…" oninput="renderAgendamentos()"></div>
+                        <div class="search-wrap">
+                            🔍 <input type="text" id="ag-search" placeholder="Protocolo, transportadora…"
+                                oninput="renderAgendamentos()">
+                        </div>
                         <select class="sel-filter" id="ag-filter-status" onchange="renderAgendamentos()">
                             <option value="">Todos status</option>
                             <option value="agendado">Agendado</option>
@@ -71,24 +71,27 @@
                     </div>
                 </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Protocolo</th>
-                            <th>Data</th>
-                            <th>Hora</th>
-                            <th>Doca</th>
-                            <th>NFs</th>
-                            <th>Pedido de Compra</th>
-                            <th>Transportadora</th>
-                            <th>Fornecedor</th>
-                            <th>Veículo</th>
-                            <th>Status</th>
-                            <th>Motorista</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ag-tbody"></tbody>
-                </table>
+                <!-- ENVOLVRO PARA ROLAGEM HORIZONTAL NA TABELA -->
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Protocolo</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th>Doca</th>
+                                <th>NFs</th>
+                                <th>Pedido de Compra</th>
+                                <th>Transportadora</th>
+                                <th>Fornecedor</th>
+                                <th>Veículo</th>
+                                <th>Status</th>
+                                <th>Motorista</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ag-tbody"></tbody>
+                    </table>
+                </div>
 
                 <div id="ag-empty" class="empty hidden">
                     <div class="eico">📋</div>
@@ -96,7 +99,6 @@
                 </div>
             </div>
         </section>
-
 
         <!-- Tela: NOVO AGENDAMENTO -->
         <section class="page" id="page-agendar">

@@ -10,12 +10,23 @@ const PAGE_TITLES = {
 };
 
 const PAGE_ACTIONS = {
-    // Agora o botão de novo agendamento chama a página 'agendar'
+    // O botão de novo agendamento chama a página 'agendar'
     agendamentos: () => `<button class="btn btn-primary" onclick="navTo('agendar')">+ Novo Agendamento</button>`,
     dashboard: () => '',
     agendar: () => '',
     cancelar: () => ''
 };
+
+// ══════════════════════════════════════════════════════════
+// MENU RESPONSIVO (MOBILE)
+// ══════════════════════════════════════════════════════════
+function toggleMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('active');
+}
 
 // ══════════════════════════════════════════════════════════
 // CONTROLE DE PÁGINAS
@@ -48,7 +59,15 @@ function navTo(page) {
         actionsElement.innerHTML = PAGE_ACTIONS[page] ? PAGE_ACTIONS[page]() : '';
     }
     
-    // 6. Executa lógicas específicas
+    // 6. Fecha o menu lateral no mobile se estiver aberto
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    if (sidebar && sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('active');
+    }
+
+    // 7. Executa lógicas específicas
     if (page === 'agendamentos') {
         if (typeof renderAgendamentos === 'function') renderAgendamentos();
     }
@@ -66,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const page = link.getAttribute('data-page');
             
             if (page) {
-                // Como TUDO agora é página, basta chamar o navTo direto!
+                // Como TUDO agora é página, basta chamar o navTo direto
                 navTo(page);
             }
         });
