@@ -1232,3 +1232,32 @@ tbody td {
         font-size: 12px;
         font-weight: bold;
     }
+
+
+
+    /*Cancelar agendamento*/
+
+    /* Asterisco vermelho para campos obrigatórios */
+.text-danger {
+    color: #e53e3e;
+    font-weight: bold;
+    margin-left: 3px;
+}
+
+/* Feedback visual: Destaca em vermelho os campos obrigatórios que não foram preenchidos */
+#form-cancelar input:invalid, 
+#form-cancelar select:invalid {
+    box-shadow: none;
+}
+
+#form-cancelar input:focus:invalid, 
+#form-cancelar select:focus:invalid {
+    border-color: #fc8181;
+    outline: none;
+}
+
+/*muda a cor do status da lista de agendamento*/
+.badge-status.status-cancelado {
+    background-color: #e53e3e; /* Fundo vermelho sólido */
+    color: #ffffff;            /* Texto branco */
+}

@@ -222,46 +222,51 @@
                     <h3 id="modal-ag-title">Cancelar Agendamento</h3>
                 </div>
 
-                <div class="modal-body">
-                    <div class="form-grid">
-                        <div class="form-sec">Localizar Agendamento</div>
+                <form id="form-cancelar" onsubmit="confirmarCancelamento(event)">
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-sec">Localizar Agendamento</div>
 
-                        <div class="fg">
-                            <label>Número do Protocolo *</label>
-                            <input type="text" id="canc-protocolo" placeholder="Ex: AG-001234">
+                            <div class="fg">
+                                <label>Número do Protocolo <span class="text-danger">*</span></label>
+                                <!-- Adicionado o atributo required -->
+                                <input type="text" id="canc-protocolo" placeholder="Ex: AG-001234" required>
+                            </div>
+
+                            <hr class="form-sep">
+                            <div class="form-sec">Detalhes do Cancelamento</div>
+
+                            <div class="fg">
+                                <label>Motivo do Cancelamento <span class="text-danger">*</span></label>
+                                <!-- Adicionado o atributo required -->
+                                <select id="canc-motivo" required>
+                                    <option value="">Selecione o motivo…</option>
+                                    <option value="atraso">Atraso na viagem / Quebra do veículo</option>
+                                    <option value="documentacao">Problema na documentação / NF</option>
+                                    <option value="reagendamento">Necessidade de reagendar para outra data</option>
+                                    <option value="cancelado_fornecedor">Carga cancelada pelo fornecedor</option>
+                                    <option value="erro_digitacao">Erro de digitação no agendamento</option>
+                                    <option value="outro">Outro motivo</option>
+                                </select>
+                            </div>
+
+                            <div class="fg span2">
+                                <label>Justificativa / Observações</label>
+                                <textarea id="canc-obs" placeholder="Descreva os detalhes do cancelamento…"></textarea>
+                            </div>
                         </div>
 
-                        <hr class="form-sep">
-                        <div class="form-sec">Detalhes do Cancelamento</div>
-
-                        <div class="fg">
-                            <label>Motivo do Cancelamento *</label>
-                            <select id="canc-motivo">
-                                <option value="">Selecione o motivo…</option>
-                                <option value="atraso">Atraso na viagem / Quebra do veículo</option>
-                                <option value="documentacao">Problema na documentação / NF</option>
-                                <option value="reagendamento">Necessidade de reagendar para outra data</option>
-                                <option value="cancelado_fornecedor">Carga cancelada pelo fornecedor</option>
-                                <option value="erro_digitacao">Erro de digitação no agendamento</option>
-                                <option value="outro">Outro motivo</option>
-                            </select>
-                        </div>
-
-                        <div class="fg span2">
-                            <label>Justificativa / Observações *</label>
-                            <textarea id="canc-obs" placeholder="Descreva os detalhes do cancelamento…"></textarea>
+                        <div class="modal-ft">
+                            <!-- Type="button" para evitar enviar o form acidentalmente ao clicar em voltar -->
+                            <button type="button" class="btn btn-outline" onclick="navTo('dashboard')">Voltar</button>
+                            <!-- Type="submit" dispara a validação e a função JS -->
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color: var(--red); border-color: var(--red);">ConfirmarCancelamento</button>
                         </div>
                     </div>
-
-                    <div class="modal-ft">
-                        <button class="btn btn-outline" onclick="navTo('dashboard')">Voltar</button>
-                        <button class="btn btn-primary" style="background-color: var(--red); border-color: var(--red);"
-                            onclick="confirmarCancelamento()">Confirmar Cancelamento</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </section>
-
     </div>
 
     <!-- O JavaScript é carregado apenas uma vez, no final da página -->

@@ -36,10 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     configurarValidacaoDinamica(); // Inicia a regra de remover borda vermelha ao digitar
 
-    // Se abrir na tela de agendamentos, já renderiza a tabela
-    if (document.getElementById('page-agendamentos')?.classList.contains('active')) {
-        renderAgendamentos();
-    }
+    // Garante que o sistema sempre inicie pelo Menu Inicial (dashboard)
+    navTo('dashboard');
 });
 
 // ══════════════════════════════════════════════════════════
@@ -221,15 +219,15 @@ function salvarAg() {
     document.getElementById("ag-peso").value = "";
     document.getElementById("ag-tipo-carga").value = "";
 
-    // Navega para a tela de lista
-    navTo('agendamentos');
+    // Navega para a tela de MENU INICIAL ao invés de listar agendamentos
+    navTo('dashboard');
 
 }
 
 
 
 // ══════════════════════════════════════════════════════════
-// RENDERIZAR TABELA (MEUS AGENDAMENTOS)
+// RENDERIZAR TABELA (MEUS AGENDAMENTOS) - COM FILTROS
 // ══════════════════════════════════════════════════════════
 
 function renderAgendamentos() {
@@ -241,22 +239,48 @@ function renderAgendamentos() {
 
     let agendamentosSalvos = JSON.parse(localStorage.getItem('dockflow_agendamentos')) || [];
 
+    // 1. CAPTURAR OS VALORES DOS FILTROS DA TELA
+    const termoBusca = document.getElementById('ag-search')?.value.toLowerCase().trim() || '';
+    const filtroStatus = document.getElementById('ag-filter-status')?.value.toLowerCase() || '';
+    const filtroData = document.getElementById('ag-filter-data')?.value || '';
+
+    // 2. APLICAR OS FILTROS NA LISTA
+    let agendamentosFiltrados = agendamentosSalvos.filter(ag => {
+        // Filtro por Status
+        const matchStatus = filtroStatus === '' || ag.status.toLowerCase() === filtroStatus;
+
+        // Filtro por Data
+        const matchData = filtroData === '' || ag.data === filtroData;
+
+        // Filtro por Busca (Pesquisa em Protocolo ou Transportadora)
+        const matchBusca = termoBusca === '' ||
+            ag.protocolo.toLowerCase().includes(termoBusca) ||
+            (ag.transportadora && ag.transportadora.toLowerCase().includes(termoBusca));
+
+        // O registro só aparece se passar em todos os filtros ativos
+        return matchStatus && matchData && matchBusca;
+    });
+
     // Limpa a tabela antes de preencher
     tbody.innerHTML = '';
 
-
-    // verifica se a tabela está vazia e mostra mensagem do HTML
-    if (agendamentosSalvos.length === 0) {
+    // verifica se a tabela está vazia após os filtros e mostra mensagem
+    if (agendamentosFiltrados.length === 0) {
         if (divVazia) divVazia.classList.remove('hidden');
     } else {
         if (divVazia) divVazia.classList.add('hidden');
     }
 
-    //organiza os dados do mais novo para o mais velho (o push deixa invertido por isso issa reverse())
-    agendamentosSalvos.slice().reverse().forEach(ag => {
+    //organiza os dados do mais novo para o mais velho
+    agendamentosFiltrados.slice().reverse().forEach(ag => {
         const dataFormatada = ag.data.split('-').reverse().join('/');
 
         const tr = document.createElement('tr');
+        // Se o status for cancelado, podemos aplicar uma cor/opacidade diferente no CSS posteriormente
+        if (ag.status === 'Cancelado') {
+            tr.style.opacity = '0.7';
+        }
+
         tr.innerHTML = `
         <td><strong>${ag.protocolo}</strong></td>
         <td>${dataFormatada}</td>
@@ -267,10 +291,97 @@ function renderAgendamentos() {
         <td>${ag.transportadora || '-'}</td>
         <td>${ag.fornecedor}</td>
         <td>${ag.placaVeiculo}</td>
-        <td><span class="badge-status">${ag.status}</span></td>
+        <td><span class="badge-status status-${ag.status.toLowerCase()}">${ag.status}</span></td>
         <td>${ag.motorista}</td>
         `;
-        tbody.appendChild(tr)
-    })
+        tbody.appendChild(tr);
+    });
+}
 
+
+// ══════════════════════════════════════════════════════════
+// CANCELAR AGENDAMENTO - EXCLUSÃO LÓGICA NO STORAGE
+// ══════════════════════════════════════════════════════════
+
+function confirmarCancelamento(event) {
+    // Interrompe o envio padrão da página para usarmos o Javascript
+    event.preventDefault();
+
+    // Coleta dos dados do formulário
+    const protocolo = document.getElementById('canc-protocolo').value.trim();
+    const motivo = document.getElementById('canc-motivo').value;
+    const observacao = document.getElementById('canc-obs').value.trim();
+
+    // Verificação de segurança adicional
+    if (!protocolo || !motivo) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Atenção',
+            text: 'O Número do Protocolo e o Motivo do Cancelamento são obrigatórios!'
+        });
+        return;
+    }
+
+    // 1. BUSCAR O AGENDAMENTO NO LOCALSTORAGE
+    let agendamentosSalvos = JSON.parse(localStorage.getItem('dockflow_agendamentos')) || [];
+    const indexAgendamento = agendamentosSalvos.findIndex(ag => ag.protocolo === protocolo);
+
+    // Se não encontrar o protocolo na lista
+    if (indexAgendamento === -1) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Protocolo não encontrado',
+            text: `Não localizamos o agendamento referente ao protocolo ${protocolo}.`
+        });
+        return;
+    }
+
+    // Se o agendamento já estiver cancelado, impede que seja cancelado de novo
+    if (agendamentosSalvos[indexAgendamento].status === 'Cancelado') {
+        Swal.fire({
+            icon: 'info',
+            title: 'Aviso',
+            text: `O protocolo ${protocolo} já encontra-se cancelado no sistema.`
+        });
+        return;
+    }
+
+    // Sistema pergunta se o usuário de fato deseja cancelar
+    Swal.fire({
+        title: 'Confirmar Cancelamento?',
+        html: `Você está prestes a cancelar o agendamento do protocolo <strong>${protocolo}</strong>.<br>Esta ação não poderá ser desfeita.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e53e3e',
+        cancelButtonColor: '#a0aec0',
+        confirmButtonText: 'Sim, cancelar agendamento!',
+        cancelButtonText: 'Não, voltar'
+    }).then((result) => {
+
+        // Verifica se o usuário clicou em "Sim"
+        if (result.isConfirmed) {
+
+            // 2. ATUALIZAR STATUS NO ARRAY
+            agendamentosSalvos[indexAgendamento].status = 'Cancelado';
+            agendamentosSalvos[indexAgendamento].motivoCancelamento = motivo;
+            agendamentosSalvos[indexAgendamento].obsCancelamento = observacao;
+
+            // 3. SALVAR NOVAMENTE NO LOCALSTORAGE
+            localStorage.setItem('dockflow_agendamentos', JSON.stringify(agendamentosSalvos));
+
+            // Sistema exibe mensagem de sucesso
+            Swal.fire({
+                title: 'Cancelado!',
+                text: `O agendamento ${protocolo} foi cancelado com sucesso.`,
+                icon: 'success',
+                confirmButtonColor: '#3182ce'
+            }).then(() => {
+                // Limpa o formulário
+                document.getElementById('form-cancelar').reset();
+
+                // Retorna para a tela de 'Meus Agendamentos' (que agora renderiza aplicando os filtros)
+                navTo('agendamentos');
+            });
+        }
+    });
 }
