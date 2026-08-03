@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ==========================================================================
+   1. VARIÁVEIS E BASE (Pode extrair para base.css)
+   ========================================================================== */
+
+:root {
+    --navy: #0D1B2A;
+    --navy-2: #162236;
+    --navy-3: #1E3050;
+    --steel: #2B4A6F;
+    --sky: #3B82F6;
+    --sky-lt: #EFF6FF;
+    --sky-dim: rgba(59, 130, 246, .12);
+    --amber: #F59E0B;
+    --amber-lt: #FFFBEB;
+    --green: #10B981;
+    --green-lt: #ECFDF5;
+    --red: #EF4444;
+    --red-lt: #FEF2F2;
+    --purple: #8B5CF6;
+    --purple-lt: #F5F3FF;
+    --slate: #F1F5F9;
+    --slate-2: #E2E8F0;
+    --slate-3: #94A3B8;
+    --slate-4: #64748B;
+    --slate-5: #334155;
+    --white: #FFFFFF;
+    --r: 8px;
+    --r-lg: 12px;
+    --sh: 0 1px 3px rgba(0, 0, 0, .08), 0 4px 12px rgba(0, 0, 0, .05);
+    --sh-lg: 0 8px 30px rgba(0, 0, 0, .12);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--slate);
+    color: var(--slate-5);
+    min-height: 100vh;
+    display: flex;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.text-danger {
+    color: var(--red);
+    font-weight: bold;
+    margin-left: 3px;
+}
+
+
+/* ==========================================================================
+   CLASSES UTILITÁRIAS
+   ========================================================================== */
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.mt-8 {
+    margin-top: 8px;
+}
+
+.ml-auto {
+    margin-left: auto;
+}

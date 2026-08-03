@@ -1,0 +1,601 @@
+/* ==========================================================================
+   3. COMPONENTES (Pode extrair para components.css)
+   ========================================================================== */
+
+/* --- NAVEGAÇÃO --- */
+.nav-section {
+    padding: 12px 0 4px;
+}
+
+.nav-label {
+    padding: 6px 18px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--steel);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 18px;
+    cursor: pointer;
+    color: var(--slate-3);
+    font-size: 13px;
+    font-weight: 500;
+    border-left: 2px solid transparent;
+    transition: all .15s;
+    user-select: none;
+    text-decoration: none;
+}
+
+.nav-item:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .04);
+}
+
+.nav-item.active {
+    color: #fff;
+    border-left-color: var(--sky);
+    background: rgba(59, 130, 246, .1);
+}
+
+.nav-item .ni {
+    font-size: 16px;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* --- CARDS --- */
+.card {
+    background: var(--white);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh);
+    overflow: visible;
+}
+
+.card-hd {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--slate-2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.card-hd h3 {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.card-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* --- FORMS --- */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.fg {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fg.span2 {
+    grid-column: span 2;
+}
+
+.fg label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--slate-4);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+.fg input,
+.fg select,
+.fg textarea {
+    padding: 8px 11px;
+    border: 1px solid var(--slate-2);
+    border-radius: var(--r);
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--slate-5);
+    background: var(--white);
+    outline: none;
+    transition: border .15s;
+}
+
+.fg input:focus,
+.fg select:focus,
+.fg textarea:focus {
+    border-color: var(--sky);
+    box-shadow: 0 0 0 3px var(--sky-dim);
+}
+
+.fg textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.form-sep {
+    grid-column: span 2;
+    border: none;
+    border-top: 1px solid var(--slate-2);
+    margin: 4px 0;
+}
+
+.form-sec {
+    grid-column: span 2;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--slate-3);
+    padding-top: 4px;
+}
+
+form input:invalid,
+form select:invalid {
+    box-shadow: none;
+}
+
+form input:focus:invalid,
+form select:focus:invalid {
+    border-color: #fc8181;
+    outline: none;
+}
+
+/* --- TABELAS --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background: var(--slate);
+    padding: 8px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .2px;
+    color: var(--slate-3);
+    white-space: nowrap;
+}
+
+th.th-acoes {
+    text-align: center;
+}
+
+tbody tr {
+    border-top: 1px solid var(--slate-2);
+    transition: background .1s;
+}
+
+tbody td {
+    padding: 10px 8px;
+    font-size: 11px;
+    vertical-align: middle;
+}
+
+.tr-clickable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.tr-clickable:hover td {
+    background-color: var(--sky-lt);
+}
+
+/* --- BADGES (Status) --- */
+.badge-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-status.status-agendado {
+    background-color: #e0f2f1;
+    color: #00796b;
+}
+
+.badge-status.status-cancelado {
+    background-color: var(--red);
+    color: #ffffff;
+}
+
+/* --- FILTROS (Barra Superior) --- */
+.filters-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--white);
+    border: 1px solid var(--slate-2);
+    border-radius: var(--r);
+    padding: 4px 6px;
+    position: relative;
+    transition: all 0.15s;
+}
+
+.search-wrap input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--slate-5);
+    width: 180px;
+    padding: 4px;
+}
+
+.sel-filter {
+    padding: 6px 10px;
+    border: 1px solid var(--slate-2);
+    border-radius: var(--r);
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    color: var(--slate-5);
+    background: var(--white);
+    transition: all 0.15s;
+}
+
+.date-time-filter {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--slate-2);
+    border-radius: var(--r);
+    overflow: hidden;
+    transition: all 0.15s;
+}
+
+.dt-input {
+    border: none;
+    background: transparent;
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--slate-5);
+    outline: none;
+    cursor: pointer;
+}
+
+.dt-sep {
+    width: 1px;
+    height: 16px;
+    background: var(--slate-2);
+}
+
+.search-wrap:hover,
+.sel-filter:hover,
+.date-time-filter:hover,
+.btn-filter:hover {
+    background: var(--sky-lt);
+    border-color: var(--sky);
+}
+
+/* --- BOTÕES --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--r);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--sky);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #2563EB;
+}
+
+.btn-outline {
+    background: var(--sky);
+    color: #fff;
+    border: 1px solid var(--slate-2);
+}
+
+.btn-outline:hover {
+    background: #2563EB;
+}
+
+/* Botão Soft (Azul Claro) para ações de suporte */
+.btn-soft {
+    background: var(--sky-lt);
+    color: var(--sky);
+    border: 1px solid var(--sky-dim);
+}
+
+.btn-soft:hover {
+    background: var(--sky-dim);
+    border-color: var(--sky);
+}
+
+.btn-danger {
+    background: var(--red);
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: #DC2626;
+}
+
+.btn-filter {
+    background: var(--white);
+    color: var(--slate-5);
+    border: 1px solid var(--slate-2);
+    padding: 6px 14px;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 11px;
+}
+
+.td-acoes {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-acao {
+    background: var(--white);
+    border: 1px solid var(--slate-2);
+    border-radius: 6px;
+    padding: 4px 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-acao:hover {
+    transform: scale(1.1);
+}
+
+.btn-acao.view:hover {
+    border-color: var(--sky);
+    background: var(--sky-lt);
+}
+
+.btn-acao.edit:hover {
+    border-color: var(--sky);
+    background: var(--sky-lt);
+    color: var(--sky); 
+}
+
+/* --- MODAIS --- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13, 27, 42, .6);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal {
+    background: var(--slate-2);
+    border-radius: 14px;
+    width: 580px;
+    max-width: 96vw;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, .25);
+    animation: mUp .22s ease;
+}
+
+.modal-wide {
+    width: 720px;
+}
+
+@keyframes mUp {
+    from {
+        transform: translateY(24px);
+        opacity: 0;
+    }
+
+    to {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+.modal-hd {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--slate-2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-hd h3 {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--slate-3);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.modal-close:hover {
+    background: var(--slate-2);
+}
+
+.modal-body {
+    padding: 18px 22px;
+}
+
+.modal-ft {
+    padding: 14px 22px;
+    border-top: 1px solid var(--slate-2);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.dl-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dl-row .dl {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    color: var(--slate-3);
+}
+
+.dl-row .dv {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   CUSTOMIZAÇÃO DO UPLOAD DE ARQUIVO
+   ========================================================================== */
+
+/* Oculta o input de arquivo padrão do navegador */
+.hidden-file-input {
+    display: none !important;
+}
+
+/* Exibição do texto com o nome do arquivo selecionado */
+.file-name-display {
+    font-size: 11px;
+    color: var(--slate-4);
+    margin-top: 6px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Borda e cor para validação visual no botão (Quando esquecer de anexar) */
+.btn-error-border {
+    border: 1px solid var(--red) !important;
+    background-color: var(--red-lt) !important;
+    color: var(--red) !important;
+}
+
+
+.btn-upload {
+    width: fit-content;
+}
+
+/* --- CONTADOR DE AGENDAMENTOS --- 
+.badge-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--sky-lt);
+    color: var(--sky);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    border: 1px solid var(--sky-dim);
+    transition: all 0.2s ease;
+}
+
+*/
+
+/* --- CONTADOR DE AGENDAMENTOS (Azul Suave) --- */
+.badge-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7CAFF7; /* Tom de azul mais suave e amigável */
+    color: var(--white); 
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 12px;
+    min-width: 30px;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.15); /* Sombra mais delicada */
+}
+
+/* Dentro de CSS/components.css */
+
+.icon {
+  width: 24px;
+  height: 24px;
+  /* O fill currentColor faz o ícone herdar a cor do texto do elemento pai (ex: a cor do texto do botão) */
+  fill: currentColor; 
+  transition: fill 0.3s ease, transform 0.2s ease;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Exemplo prático de UI: Ao passar o mouse no botão, o ícone muda junto */
+.btn-agenda:hover .icon {
+  fill: #0056b3; /* Cor de destaque */
+  transform: scale(1.1); /* Leve aumento para feedback visual */
+}
+
+/* Botão com o azul suave do contador de agendamentos */
+.btn-amigavel {
+    background-color: #7CAFF7; 
+    color: var(--white);
+    border: 1px solid #7CAFF7;
+}
+
+.btn-amigavel:hover {
+    background-color: #629bf0; /* Um tom levemente mais escuro para dar o efeito de clique */
+    border-color: #629bf0;
+}

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corsul DockFlow - Agendamentos</title>
+    <link rel="stylesheet" href="./CSS/base.css">
+    <link rel="stylesheet" href="./CSS/layout.css">
+    <link rel="stylesheet" href="./CSS/components.css">
+    <link rel="stylesheet" href="./CSS/mobile.css">
+</head>
+
+<body>
+
+    <body>
+        <!-- ========================================== -->
+        <!-- SVG SPRITE (Fica oculto na página)         -->
+        <!-- ========================================== -->
+        <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- Ícone de Calendário -->
+            <symbol id="icon-calendar-plus" viewBox="0 0 24 24">
+                <path d="M13 10h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
+                <path
+                    d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2M5 20V8h14V6v14z">
+                </path>
+            </symbol>
+
+            <!-- Você pode adicionar novos <symbol> aqui no futuro -->
+
+        </svg>
+
+        <!-- OVERLAY PARA MOBILE -->
+        <div class="sidebar-overlay" onclick="toggleMenu()"></div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+
+            <!-- Adicionado o onclick e substituído o emoji pelo SVG -->
+            <a class="sidebar-logo" data-page="dashboard" onclick="navTo('dashboard')" style="text-decoration: none;">
+                <div class="logo-icon">
+                    <!-- Alterado o fill para var(--sky) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--sky)"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M19.1 7.8c-.38-.5-.97-.8-1.6-.8H15V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2 0 1.65 1.35 3 3 3s3-1.35 3-3h4c0 1.65 1.35 3 3 3s3-1.35 3-3c1.1 0 2-.9 2-2v-3.67c0-.43-.14-.86-.4-1.2zM17.5 9l1.5 2h-4V9zM7 19a1.003 1.003 0 0 1-.87-1.5c.37-.63 1.36-.63 1.73 0 .09.15.13.32.13.49 0 .55-.45 1-1 1Zm2.23-3s-.05-.05-.08-.07c-.06-.06-.12-.11-.17-.16-.12-.11-.25-.21-.38-.29a3 3 0 0 0-.67-.32c-.07-.02-.14-.05-.21-.07Q7.375 15 7 15c-.375 0-.49.04-.72.09-.07.02-.14.05-.21.07-.16.05-.31.11-.45.19-.07.04-.15.08-.22.13-.13.09-.26.18-.38.29-.06.05-.12.1-.18.16-.02.03-.05.04-.08.07h-.77V6h9v10H9.22ZM17 19a1.003 1.003 0 0 1-.87-1.5c.37-.63 1.36-.63 1.73 0 .09.15.13.32.13.49 0 .55-.45 1-1 1Zm3-3h-.77s-.05-.05-.08-.07c-.06-.06-.12-.11-.17-.16-.12-.11-.25-.21-.38-.29a3 3 0 0 0-.67-.32c-.07-.02-.14-.05-.21-.07Q17.375 15 17 15c-.375 0-.47.04-.7.09-.06.01-.12.03-.18.05-.18.06-.36.13-.52.22l-.12.06c-.17.1-.33.21-.48.35v-2.76h5v3Z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>Corsul DockFlow</h1>
+                    <p>Agendamento de Descarga</p>
+                </div>
+            </a>
+
+
+
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-label">Operação</div>
+
+                    <a class="nav-item" data-page="agendar" onclick="navTo('agendar')">
+                        <span class="ni">
+                            <svg class="icon" aria-hidden="true" width="16" height="16" fill="currentColor">
+                                <use href="#icon-calendar-plus"></use>
+                            </svg>
+                        </span>
+                        Agendar Descarga
+                    </a>
+
+                    <a class="nav-item" data-page="cancelar" onclick="navTo('cancelar')">
+                        <span class="ni">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M14.29 10.29 12 12.59l-2.29-2.3-1.42 1.42 2.3 2.29-2.3 2.29 1.42 1.42 2.29-2.3 2.29 2.3 1.42-1.42-2.3-2.29 2.3-2.29z">
+                                </path>
+                                <path
+                                    d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2M5 20V8h14V6v14z">
+                                </path>
+                            </svg>
+                        </span>
+                        Cancelar Agendamento
+                    </a>
+
+                    <a class="nav-item active" data-page="agendamentos" onclick="navTo('agendamentos')">
+                        <span class="ni">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path d="M7 11h10v2H7zm0 4h7v2H7z"></path>
+                                <path
+                                    d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2M5 20V8h14V6v14z">
+                                </path>
+                            </svg>
+                        </span>
+                        Meus Agendamentos
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTAINER -->
+        <div class="main">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+                    <h2 id="topbar-title">Meus Agendamentos</h2>
+                </div>
+                <div class="topbar-right" id="topbar-actions"></div>
+            </div>
+
+            <!-- PÁGINA: MENU INICIAL (DASHBOARD) -->
+            <section class="page" id="page-dashboard">
+                <div class="dashboard-content">
+
+                    <div class="welcome-card">
+                        <span class="welcome-badge">DockFlow</span>
+                        <h2 class="welcome-title">Bem-vindo ao<br>Corsul DockFlow!</h2>
+                        <p class="welcome-subtitle">Olá, Pronto para otimizar e gerenciar seus agendamentos hoje?</p>
+                    </div>
+
+                    <!-- CONTAINER APENAS COM A IMAGEM SVG -->
+                    <div class="dashboard-image-container">
+                        <img src="./img/Logistics-amico.svg" alt="Ilustração DockFlow" class="dashboard-svg">
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- PÁGINA: MEUS AGENDAMENTOS -->
+            <section class="page active" id="page-agendamentos">
+                <div class="card">
+                    <div class="card-hd">
+                        <h3 style="display: flex; align-items: center;">
+                            Todos os agendamentos
+                            <span id="ag-contador" class="badge-count">0</span>
+                        </h3>
+                        <div class="filters-container">
+                            <select class="sel-filter" id="ag-filter-status">
+                                <option value="">Todos os status</option>
+                                <option value="agendado">Agendado</option>
+                                <option value="confirmado">Confirmado</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+
+                            <div class="date-time-filter">
+                                <input type="date" id="ag-filter-data" class="dt-input" title="Filtrar por Data">
+                                <div class="dt-sep"></div>
+                                <input type="time" id="ag-filter-hora" class="dt-input" title="Filtrar por Hora">
+                            </div>
+
+                            <div class="search-wrap">
+                                <input type="text" id="ag-search" placeholder="Pesquisa geral..."
+                                    onkeyup="if(event.key === 'Enter') renderAgendamentos()">
+                            </div>
+
+                            <button type="button" class="btn btn-filter" onclick="renderAgendamentos()"
+                                title="Executar Busca">Buscar</button>
+                            <button type="button" class="btn btn-filter" onclick="limparFiltros()"
+                                title="Limpar todos os filtros">Limpar</button>
+
+                            <!----IMPORT DO ICONE EXCEL NOS MEUS AGENDAMENTOS-->
+                            <button type="button" class="btn btn-filter btn-excel ml-auto" onclick="exportarParaExcel()"
+                                title="Exportar lista atual para Excel">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M4 21h15.893c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2zm2-14h4v4H6V7zm6 0h7.893l.001 4H12V7zM6 13h4v6H6v-6zm6 0h7.893v6H12v-6z">
+                                    </path>
+                                </svg>
+                                Excel
+                            </button>
+
+
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data / Hora</th>
+                                    <th>Fornecedor</th>
+                                    <th>Transportadora</th>
+                                    <th>Doca</th>
+                                    <th>Status</th>
+                                    <th>Veículo / Motorista</th>
+                                    <th>NF</th>
+                                    <th>Pedido</th>
+                                    <th>Protocolo</th>
+                                    <th class="th-acoes">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ag-tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="ag-empty" class="empty hidden">
+                        <div class="eico">📋</div>
+                        <p>Nenhum agendamento encontrado.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PÁGINA: NOVO AGENDAMENTO -->
+            <section class="page" id="page-agendar">
+                <div class="card card-form">
+                    <div class="card-hd">
+                        <h3 id="modal-ag-title">Novo Agendamento</h3>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-sec">Dados do Transporte</div>
+
+                            <div class="fg">
+                                <label>Transportadora </label>
+                                <input type="text" id="ag-transp" placeholder="Nome da Transportadora">
+                            </div>
+
+                            <div class="fg">
+                                <label>Fornecedor / Remetente *</label>
+                                <input type="text" id="ag-forn" placeholder="Nome do Fornecedor / Remetente">
+                            </div>
+
+                            <div class="fg">
+                                <label>Motorista *</label>
+                                <input type="text" id="ag-motorista" placeholder="Nome completo">
+                            </div>
+
+                            <div class="fg">
+                                <label>Telefone *</label>
+                                <input type="text" id="ag-telefone" placeholder="Ex: (048) 99999-9999">
+                            </div>
+
+                            <div class="fg">
+                                <label>E-mail *</label>
+                                <input type="email" id="ag-email" placeholder="E-mail de Contato">
+                            </div>
+
+                            <div class="fg">
+                                <label>Placa do veículo *</label>
+                                <input type="text" id="ag-placa" class="text-uppercase" placeholder="ABC-1234"
+                                    oninput="this.value=this.value.toUpperCase()">
+                            </div>
+
+                            <div class="fg">
+                                <label>Tipo de veículo</label>
+                                <select id="ag-veiculo">
+                                    <option value="">SELECIONE...</option>
+                                    <option value="truck">TRUCK</option>
+                                    <option value="carreta">CARRETA</option>
+                                    <option value="bitrem">FURGÃO</option>
+                                    <option value="van">VAN</option>
+                                    <option value="toco">TOCO</option>
+                                </select>
+                            </div>
+
+                            <hr class="form-sep">
+                            <div class="form-sec">Agendamento</div>
+
+                            <div class="fg">
+                                <label>Data *</label>
+                                <input type="date" id="ag-data">
+                            </div>
+
+                            <div class="fg">
+                                <label>Horário *</label>
+                                <input type="time" id="ag-hora-ini">
+                            </div>
+
+                            <div class="fg">
+                                <label>TIPO DE CARGA</label>
+                                <select id="ag-tipo-carga">
+                                    <option value="">SELECIONE...</option>
+                                    <option value="palete">PALETIZADA</option>
+                                    <option value="fracionada">FRACIONADA</option>
+                                    <option value="perigosa">CARGA PERIGOSA</option>
+                                </select>
+                            </div>
+
+                            <div class="fg">
+                                <label>Peso estimado (kg)</label>
+                                <input type="number" id="ag-peso" placeholder="0" min="0">
+                            </div>
+
+                            <div class="fg">
+                                <label>Volume *</label>
+                                <input type="number" id="ag-volume" placeholder="0" min="0">
+                            </div>
+
+                            <div class="fg">
+                                <label>Anexar NF / Pedido (PDF) <span class="text-danger">*</span></label>
+
+                                <input type="file" id="ag-arquivo-nf" accept="application/pdf"
+                                    class="hidden-file-input">
+
+                                <button type="button" id="btn-ag-nf" class="btn btn-filter btn-upload"
+                                    onclick="document.getElementById('ag-arquivo-nf').click()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path d="M11 15h2V9h3l-4-5-4 5h3z"></path>
+                                        <path d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z">
+                                        </path>
+                                    </svg>
+                                    Escolher Arquivo PDF
+                                </button>
+
+                                <span id="nome-arquivo-nf" class="file-name-display">Nenhum arquivo selecionado</span>
+                            </div>
+
+                            <div class="fg">
+                                <label>Nota Fiscal</label>
+                                <input type="text" id="ag-notafiscal" placeholder="Ex: 000459763">
+                            </div>
+
+                            <div class="fg">
+                                <label>Pedido de Compra</label>
+                                <input type="text" id="ag-pedido" placeholder="Ex: 123456">
+                            </div>
+
+                            <div class="fg span2">
+                                <label>Observações</label>
+                                <textarea id="ag-obs" placeholder="Instruções especiais, restrições…"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-ft">
+                        <button type="button" class="btn btn-outline" onclick="navTo('dashboard')">Voltar</button>
+                        <button type="button" class="btn btn-primary" onclick="salvarAg()">Salvar agendamento</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PÁGINA: CANCELAR AGENDAMENTO -->
+            <section class="page" id="page-cancelar">
+                <div class="card card-form">
+                    <div class="card-hd">
+                        <h3 id="modal-ag-title">Cancelar Agendamento</h3>
+                    </div>
+
+                    <form id="form-cancelar" onsubmit="confirmarCancelamento(event)" novalidate>
+                        <div class="modal-body">
+                            <div class="form-grid">
+                                <div class="form-sec">Localizar Agendamento</div>
+
+                                <div class="fg">
+                                    <label>Número do Protocolo <span class="text-danger">*</span></label>
+                                    <input type="text" id="canc-protocolo" placeholder="Ex: COR26072026DF56" required>
+                                </div>
+
+                                <hr class="form-sep">
+                                <div class="form-sec">Detalhes do Cancelamento</div>
+
+                                <div class="fg">
+                                    <label>Motivo do Cancelamento <span class="text-danger">*</span></label>
+                                    <select id="canc-motivo" required>
+                                        <option value="">Selecione o motivo…</option>
+                                        <option value="atraso">Atraso na viagem / Quebra do veículo</option>
+                                        <option value="documentacao">Problema na documentação / NF</option>
+                                        <option value="reagendamento">Necessidade de reagendar para outra data</option>
+                                        <option value="cancelado_fornecedor">Carga cancelada pelo fornecedor</option>
+                                        <option value="erro_digitacao">Erro de digitação no agendamento</option>
+                                        <option value="outro">Outro motivo</option>
+                                    </select>
+                                </div>
+
+                                <div class="fg span2">
+                                    <label>Justificativa / Observações</label>
+                                    <textarea id="canc-obs"
+                                        placeholder="Descreva os detalhes do cancelamento…"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="modal-ft">
+                                <button type="button" class="btn btn-outline"
+                                    onclick="navTo('dashboard')">Voltar</button>
+                                <button type="submit" class="btn btn-danger">Confirmar Cancelamento</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- FOOTER DO SISTEMA -->
+            <footer class="main-footer">
+                <div class="footer-left">
+                    &copy; 2026 DockFlow. Todos os direitos reservados.
+                </div>
+                <div class="footer-right">
+                    <!---- <a href="#">Ajuda e Suporte</a>
+            <sp an class="sep">&bull;</span>
+                <a href="#">Termos de Uso</a>
+                <span class="sep">&bull;</span>--->
+                    <span class="version">v1.0.0</span>
+                </div>
+            </footer>
+        </div>
+
+
+        <!-- MODAL DE VISUALIZAÇÃO -->
+        <div class="modal-overlay" id="modal-visualizar">
+            <div class="modal modal-wide">
+                <div class="modal-hd">
+                    <h3>Detalhes do Agendamento</h3>
+                    <button class="modal-close" onclick="fecharModalVisualizar()">✖</button>
+                </div>
+                <div class="modal-body" id="mv-body"></div>
+
+
+                <div class="modal-ft">
+                    <!-- 1. Voltar (Neutro usando a classe btn-filter) -->
+                    <button class="btn btn-filter" onclick="fecharModalVisualizar()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M21 11H6.414l5.293-5.293-1.414-1.414L2.586 12l7.707 7.707 1.414-1.414L6.414 13H21z">
+                            </path>
+                        </svg>
+                        Voltar
+                    </button>
+
+                    <!-- 2. Gerar PDF (Soft Azul Claro com SVG de Download) -->
+                    <button class="btn btn-soft" id="btn-pdf-modal" title="Exportar para PDF">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path d="M19 9h-4V3H9v6H5l7 8zM4 19h16v2H4z"></path>
+                        </svg>
+                        Gerar PDF
+                    </button>
+
+                    <!-- 3. Editar (Primário Sólido com SVG de Lápis) -->
+                    <button class="btn btn-primary" id="btn-editar-modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="m17.71 7.29-3-3a.996.996 0 0 0-1.41 0l-11.01 11A1 1 0 0 0 2 16v3c0 .55.45 1 1 1h3c.27 0 .52-.11.71-.29l11-11a.996.996 0 0 0 0-1.41ZM5.59 18H4v-1.59l7.5-7.5 1.59 1.59zm8.91-8.91L12.91 7.5 14 6.41 15.59 8zM11 18h11v2H11z">
+                            </path>
+                        </svg>
+                        Editar
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <!-- MODAL DE EDIÇÃO -->
+        <div class="modal-overlay" id="modal-editar">
+            <div class="modal modal-wide">
+                <div class="modal-hd">
+                    <h3>Editar Agendamento</h3>
+                    <button class="modal-close" onclick="fecharModalEditar()">✖</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-sec">Dados do Transporte</div>
+                        <div class="fg">
+                            <label>Transportadora </label>
+                            <input type="text" id="edit-transp" placeholder="Nome da Transportadora">
+                        </div>
+                        <div class="fg">
+                            <label>Fornecedor / Remetente *</label>
+                            <input type="text" id="edit-forn" placeholder="Nome do Fornecedor / Remetente">
+                        </div>
+                        <div class="fg">
+                            <label>Motorista *</label>
+                            <input type="text" id="edit-motorista" placeholder="Nome completo">
+                        </div>
+                        <div class="fg">
+                            <label>Telefone *</label>
+                            <input type="text" id="edit-telefone" placeholder="Ex: (048) 99999-9999">
+                        </div>
+                        <div class="fg">
+                            <label>E-mail *</label>
+                            <input type="email" id="edit-email" placeholder="E-mail de Contato">
+                        </div>
+                        <div class="fg">
+                            <label>Placa do veículo *</label>
+                            <input type="text" id="edit-placa" class="text-uppercase" placeholder="ABC-1234"
+                                oninput="this.value=this.value.toUpperCase()">
+                        </div>
+                        <div class="fg">
+                            <label>Tipo de veículo</label>
+                            <select id="edit-veiculo">
+                                <option value="">Selecione…</option>
+                                <option value="truck">Truck</option>
+                                <option value="carreta">Carreta</option>
+                                <option value="bitrem">Furgão</option>
+                                <option value="van">Van</option>
+                                <option value="toco">Toco</option>
+                            </select>
+                        </div>
+
+                        <hr class="form-sep">
+                        <div class="form-sec">Agendamento</div>
+
+                        <div class="fg">
+                            <label>Data *</label>
+                            <input type="date" id="edit-data">
+                        </div>
+                        <div class="fg">
+                            <label>Horário *</label>
+                            <input type="time" id="edit-hora-ini">
+                        </div>
+                        <div class="fg">
+                            <label>Tipo de carga</label>
+                            <select id="edit-tipo-carga">
+                                <option value="">Selecione…</option>
+                                <option value="palete">Paletizada</option>
+                                <option value="fracionada">Fracionada</option>
+                                <option value="perigosa">Carga perigosa</option>
+                            </select>
+                        </div>
+                        <div class="fg">
+                            <label>Peso estimado (kg)</label>
+                            <input type="number" id="edit-peso" placeholder="0" min="0">
+                        </div>
+                        <div class="fg">
+                            <label>Volume *</label>
+                            <input type="number" id="edit-volume" placeholder="0" min="0">
+                        </div>
+                        <div class="fg">
+                            <label>Anexar NF / Pedido (PDF) <span class="text-danger">*</span></label>
+                            <input type="file" id="edit-arquivo-nf" accept="application/pdf" class="hidden-file-input">
+
+                            <button type="button" id="btn-edit-nf" class="btn btn-filter btn-upload"
+                                onclick="document.getElementById('edit-arquivo-nf').click()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path d="M11 15h2V9h3l-4-5-4 5h3z"></path>
+                                    <path d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z"></path>
+                                </svg>
+                                Escolher Arquivo PDF
+                            </button>
+
+                            <span id="nome-edit-nf" class="file-name-display">Nenhum arquivo selecionado</span>
+                        </div>
+
+                        <div class="fg">
+                            <label>Nota Fiscal</label>
+                            <input type="text" id="edit-notafiscal" placeholder="Ex: 123456789">
+                        </div>
+                        <div class="fg">
+                            <label>Pedido de Compra</label>
+                            <input type="text" id="edit-pedido" placeholder="Ex: 123456">
+                        </div>
+                        <div class="fg span2">
+                            <label>Observações</label>
+                            <textarea id="edit-obs" placeholder="Instruções especiais, restrições…"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-ft">
+                    <button type="button" class="btn btn-outline" onclick="fecharModalEditar()">Voltar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarEdicao()">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!--Alertas-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+        <script type="module" src="./JavaScript/app.js"></script>
+    </body>
+
+</html>

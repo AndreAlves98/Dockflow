@@ -1,0 +1,313 @@
+/* ==========================================================================
+   2. LAYOUT GLOBAL E ESTRUTURA (Pode extrair para layout.css)
+   ========================================================================== */
+/* ─── SIDEBAR ─── */
+.sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+}
+
+.sidebar-logo {
+    padding: 22px 20px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--sky-dim); /* Fundo azul translúcido suave */
+    border: 1px solid rgba(59, 130, 246, 0.2); /* Borda sutil para dar profundidade */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-text h1 {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -.3px;
+}
+
+.logo-text p {
+    color: var(--slate-3);
+    font-size: 10px;
+    margin-top: 1px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+}
+
+/* ─── MAIN & TOPBAR ─── */
+.main {
+    margin-left: 240px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 0;
+}
+
+.topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--slate-2);
+    padding: 0 28px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.topbar-left h2 {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.topbar-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* ─── PAGE E ESTADOS VAZIOS ─── */
+.page {
+    display: none;
+    padding: 24px 28px;
+    animation: fadeUp .2s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--slate-3);
+}
+
+.empty .eico {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.empty p {
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   DASHBOARD / MENU INICIAL
+   ========================================================================== */
+.dashboard-content {
+    display: flex;
+    flex-direction: row; /* Deixa o texto e imagem lado a lado no desktop */
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
+    border-radius: 24px;
+    box-shadow: 0 12px 32px rgba(13, 27, 42, 0.05); /* Sombra suave estilo "Glass/Modern Card" */
+    padding: 48px;
+    margin: 20px auto;
+    max-width: 1040px;
+    min-height: calc(100vh - 160px);
+    animation: fadeUp 0.4s ease;
+    gap: 40px;
+}
+
+.welcome-card {
+    flex: 1;
+    max-width: 420px;
+}
+
+.welcome-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sky);
+    background: var(--sky-lt);
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.welcome-card .welcome-title {
+    font-size: 40px;
+    color: var(--navy);
+    margin-bottom: 16px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+}
+
+.welcome-card .welcome-subtitle {
+    color: var(--slate-4);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 0; /* Espaço para botões removido */
+}
+
+.dashboard-image-container {
+    flex: 1;
+    width: 100%;
+    max-width: 550px; /* Aumenta a imagem no desktop */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cria um "Glow" (brilho sutil) moderno atrás da ilustração */
+.dashboard-image-container::before {
+    content: '';
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+    z-index: 0;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dashboard-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    transform: scale(1.08); /* Efeito para deixar a imagem levemente mais encorpada */
+}
+
+/* --- Responsividade para o Dashboard --- */
+@media (max-width: 992px) {
+    .dashboard-content {
+        flex-direction: column; /* Volta para o empilhamento vertical no mobile */
+        text-align: center;
+        padding: 36px 20px;
+        min-height: auto;
+    }
+
+    .welcome-card {
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .welcome-card .welcome-title { 
+        font-size: 28px; 
+    }
+
+    .dashboard-image-container {
+        max-width: 85%;
+        margin-top: 24px;
+    }
+    
+    .dashboard-svg {
+        transform: scale(1); /* Reseta a escala para não vazar a tela no celular */
+    }
+}
+
+
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.main-footer {
+    margin-top: auto; /* Empurra o footer para o final da tela */
+    padding: 16px 28px;
+    border-top: 1px solid var(--slate-2);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--slate-4);
+    transition: all 0.3s ease;
+}
+
+.footer-left {
+    font-weight: 500;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-right a {
+    color: var(--slate-4);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.footer-right a:hover {
+    color: var(--sky);
+}
+
+.footer-right .sep {
+    color: var(--slate-3);
+    font-size: 10px;
+}
+
+/* Badge de versão do sistema */
+.footer-right .version {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--slate-4);
+    background: var(--slate-2);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+/* --- Responsividade para o Footer --- */
+@media (max-width: 768px) {
+    .main-footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding: 20px 16px;
+    }
+}
