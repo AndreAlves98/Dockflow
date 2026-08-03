@@ -1,0 +1,11 @@
+# Arquivos de IDEs
+.idea/
+.vscode/
+*.iml
+
+# Arquivos compilados do Java (ignora qualquer pasta target em qualquer nível)
+**/target/
+target/
+
+# Dependências locais
+node_modules/

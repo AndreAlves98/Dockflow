@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: dockflow
+
+  # Configurações do Banco de Dados
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dockflow_db
+    username: postgres
+    password: postgres #senha do pgAdmin/Postgres
+
+  # Configurações do Hibernate (Criação dinâmica das tabelas)
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
