@@ -13,8 +13,11 @@ import java.util.List;
 @CrossOrigin(origins = "*") // Importante: Libera o acesso para o seu HTML/JS local
 public class AgendamentoController {
 
-    @Autowired
-    private AgendamentoService service;
+    private final AgendamentoService service;
+
+    public AgendamentoController(AgendamentoService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<Agendamento>> listarTodos() {

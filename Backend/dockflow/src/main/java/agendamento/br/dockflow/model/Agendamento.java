@@ -1,9 +1,8 @@
 package agendamento.br.dockflow.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
- // O Lombok gera automaticamente Getters, Setters e Construtores por baixo dos panos
+// O Lombok gera automaticamente Getters, Setters e Construtores por baixo dos panos
 @Entity
 @Table(name = "tb_agendamentos")
 
@@ -70,167 +69,165 @@ public class Agendamento {
     @Column(name = "arquivo_nf", columnDefinition = "TEXT")
     private String arquivoNF;
 
-
     // GETTERS END SETTERS
 
-     public String getProtocolo() {
-         return protocolo;
-     }
+    public String getProtocolo() {
+        return protocolo;
+    }
 
-     public void setProtocolo(String protocolo) {
-         this.protocolo = protocolo;
-     }
+    public void setProtocolo(String protocolo) {
+        this.protocolo = protocolo;
+    }
 
-     public String getStatus() {
-         return status;
-     }
+    public String getStatus() {
+        return status;
+    }
 
-     public void setStatus(String status) {
-         this.status = status;
-     }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-     public String getTransportadora() {
-         return transportadora;
-     }
+    public String getTransportadora() {
+        return transportadora;
+    }
 
-     public void setTransportadora(String transportadora) {
-         this.transportadora = transportadora;
-     }
+    public void setTransportadora(String transportadora) {
+        this.transportadora = transportadora;
+    }
 
-     public String getFornecedor() {
-         return fornecedor;
-     }
+    public String getFornecedor() {
+        return fornecedor;
+    }
 
-     public void setFornecedor(String fornecedor) {
-         this.fornecedor = fornecedor;
-     }
+    public void setFornecedor(String fornecedor) {
+        this.fornecedor = fornecedor;
+    }
 
-     public String getMotorista() {
-         return motorista;
-     }
+    public String getMotorista() {
+        return motorista;
+    }
 
-     public void setMotorista(String motorista) {
-         this.motorista = motorista;
-     }
+    public void setMotorista(String motorista) {
+        this.motorista = motorista;
+    }
 
-     public String getTelefone() {
-         return telefone;
-     }
+    public String getTelefone() {
+        return telefone;
+    }
 
-     public void setTelefone(String telefone) {
-         this.telefone = telefone;
-     }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
 
-     public String getEmail() {
-         return email;
-     }
+    public String getEmail() {
+        return email;
+    }
 
-     public void setEmail(String email) {
-         this.email = email;
-     }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-     public String getPlacaVeiculo() {
-         return placaVeiculo;
-     }
+    public String getPlacaVeiculo() {
+        return placaVeiculo;
+    }
 
-     public void setPlacaVeiculo(String placaVeiculo) {
-         this.placaVeiculo = placaVeiculo;
-     }
+    public void setPlacaVeiculo(String placaVeiculo) {
+        this.placaVeiculo = placaVeiculo;
+    }
 
-     public String getTipoVeiculo() {
-         return tipoVeiculo;
-     }
+    public String getTipoVeiculo() {
+        return tipoVeiculo;
+    }
 
-     public void setTipoVeiculo(String tipoVeiculo) {
-         this.tipoVeiculo = tipoVeiculo;
-     }
+    public void setTipoVeiculo(String tipoVeiculo) {
+        this.tipoVeiculo = tipoVeiculo;
+    }
 
-     public String getData() {
-         return data;
-     }
+    public String getData() {
+        return data;
+    }
 
-     public void setData(String data) {
-         this.data = data;
-     }
+    public void setData(String data) {
+        this.data = data;
+    }
 
-     public String getHorario() {
-         return horario;
-     }
+    public String getHorario() {
+        return horario;
+    }
 
-     public void setHorario(String horario) {
-         this.horario = horario;
-     }
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
 
-     public String getTipoCarga() {
-         return tipoCarga;
-     }
+    public String getTipoCarga() {
+        return tipoCarga;
+    }
 
-     public void setTipoCarga(String tipoCarga) {
-         this.tipoCarga = tipoCarga;
-     }
+    public void setTipoCarga(String tipoCarga) {
+        this.tipoCarga = tipoCarga;
+    }
 
-     public String getPeso() {
-         return peso;
-     }
+    public String getPeso() {
+        return peso;
+    }
 
-     public void setPeso(String peso) {
-         this.peso = peso;
-     }
+    public void setPeso(String peso) {
+        this.peso = peso;
+    }
 
-     public String getVolume() {
-         return volume;
-     }
+    public String getVolume() {
+        return volume;
+    }
 
-     public void setVolume(String volume) {
-         this.volume = volume;
-     }
+    public void setVolume(String volume) {
+        this.volume = volume;
+    }
 
-     public String getPedido() {
-         return pedido;
-     }
+    public String getPedido() {
+        return pedido;
+    }
 
-     public void setPedido(String pedido) {
-         this.pedido = pedido;
-     }
+    public void setPedido(String pedido) {
+        this.pedido = pedido;
+    }
 
-     public String getNotaFiscal() {
-         return notaFiscal;
-     }
+    public String getNotaFiscal() {
+        return notaFiscal;
+    }
 
-     public void setNotaFiscal(String notaFiscal) {
-         this.notaFiscal = notaFiscal;
-     }
+    public void setNotaFiscal(String notaFiscal) {
+        this.notaFiscal = notaFiscal;
+    }
 
-     public String getObservacoes() {
-         return observacoes;
-     }
+    public String getObservacoes() {
+        return observacoes;
+    }
 
-     public void setObservacoes(String observacoes) {
-         this.observacoes = observacoes;
-     }
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
+    }
 
-     public String getMotivoCancelamento() {
-         return motivoCancelamento;
-     }
+    public String getMotivoCancelamento() {
+        return motivoCancelamento;
+    }
 
-     public void setMotivoCancelamento(String motivoCancelamento) {
-         this.motivoCancelamento = motivoCancelamento;
-     }
+    public void setMotivoCancelamento(String motivoCancelamento) {
+        this.motivoCancelamento = motivoCancelamento;
+    }
 
-     public String getObsCancelamento() {
-         return obsCancelamento;
-     }
+    public String getObsCancelamento() {
+        return obsCancelamento;
+    }
 
-     public void setObsCancelamento(String obsCancelamento) {
-         this.obsCancelamento = obsCancelamento;
-     }
+    public void setObsCancelamento(String obsCancelamento) {
+        this.obsCancelamento = obsCancelamento;
+    }
 
-     public String getArquivoNF() {
-         return arquivoNF;
-     }
+    public String getArquivoNF() {
+        return arquivoNF;
+    }
 
-     public void setArquivoNF(String arquivoNF) {
-         this.arquivoNF = arquivoNF;
-     }
- }
-
+    public void setArquivoNF(String arquivoNF) {
+        this.arquivoNF = arquivoNF;
+    }
+}

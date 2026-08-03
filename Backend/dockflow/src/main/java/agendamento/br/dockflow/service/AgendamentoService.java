@@ -14,8 +14,12 @@ import java.util.Random;
 @Service
 public class AgendamentoService {
 
-    @Autowired
-    private AgendamentoRepository repository;
+    private final AgendamentoRepository repository;
+
+    // Construtor que substitui o @Autowired
+    public AgendamentoService(AgendamentoRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Agendamento> obterTodos() {
         return repository.findAll();
@@ -88,6 +92,6 @@ public class AgendamentoService {
             aleatorio.append(caracteres.charAt(rnd.nextInt(caracteres.length())));
         }
 
-        return "COR" + dataFormatada + "DF" + aleatorio.toString();
+        return "COR" + dataFormatada + "DF" + aleatoric.toString();
     }
 }
