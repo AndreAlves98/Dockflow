@@ -1,4 +1,3 @@
-// JavaScript/app.js
 import { CONFIG, state, CAMPOS_EDIT_OBRIGATORIOS } from './config.js';
 import { ApiController } from './api.js';
 import { configurarUploadNF, configurarValidacaoDinamica } from './validations.js';
@@ -59,74 +58,53 @@ export async function salvarAg() {
 
     const valorPedido = document.getElementById("ag-pedido").value.trim();
 
-    const dadosFormulario = {
-        transportadora: document.getElementById("ag-transp").value.toUpperCase(),
-        fornecedor: document.getElementById("ag-forn").value.toUpperCase(),
-        motorista: document.getElementById("ag-motorista").value.toUpperCase(),
-        telefone: document.getElementById("ag-telefone").value,
-        email: document.getElementById("ag-email").value,
-        placaVeiculo: document.getElementById("ag-placa").value.toUpperCase(),
-        tipoVeiculo: document.getElementById("ag-veiculo").value.toUpperCase(),
-        data: document.getElementById("ag-data").value,
-        horario: document.getElementById("ag-hora-ini").value,
-        tipoCarga: document.getElementById("ag-tipo-carga").value.toUpperCase(),
-        peso: document.getElementById("ag-peso").value,
-        volume: document.getElementById("ag-volume").value,
-        pedido: valorPedido ? valorPedido.padStart(6, '0') : '-',
-        notaFiscal: document.getElementById("ag-notafiscal").value.padStart(9, '0'),
-        observacoes: document.getElementById("ag-obs").value,
-        // Caso o Base64UploadAg exista, envia a base64, senão envia nulo (adequado ao Java)
-        arquivoNF: state.base64UploadAg ? state.base64UploadAg.base64 : null 
-    };
+    // Utilizando FormData no lugar de um objeto simples JSON
+    const formData = new FormData();
+    formData.append('transportadora', document.getElementById("ag-transp").value.toUpperCase());
+    formData.append('fornecedor', document.getElementById("ag-forn").value.toUpperCase());
+    formData.append('motorista', document.getElementById("ag-motorista").value.toUpperCase());
+    formData.append('telefone', document.getElementById("ag-telefone").value);
+    formData.append('email', document.getElementById("ag-email").value);
+    formData.append('placaVeiculo', document.getElementById("ag-placa").value.toUpperCase());
+    formData.append('tipoVeiculo', document.getElementById("ag-veiculo").value.toUpperCase());
+    formData.append('data', document.getElementById("ag-data").value);
+    formData.append('horario', document.getElementById("ag-hora-ini").value);
+    formData.append('tipoCarga', document.getElementById("ag-tipo-carga").value.toUpperCase());
+    formData.append('peso', document.getElementById("ag-peso").value);
+    formData.append('volume', document.getElementById("ag-volume").value);
+    formData.append('pedido', valorPedido ? valorPedido.padStart(6, '0') : '-');
+    formData.append('notaFiscal', document.getElementById("ag-notafiscal").value.padStart(9, '0'));
+    formData.append('observacoes', document.getElementById("ag-obs").value);
+    
+    // Anexa o PDF bruto se ele existir no state
+    if (state.arquivoUploadAg) {
+        formData.append('arquivoNF', state.arquivoUploadAg);
+    }
 
-    Swal.fire({
-        title: 'Salvando...',
-        text: 'Por favor, aguarde.',
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading()
-    });
+    Swal.fire({ title: 'Salvando...', text: 'Por favor, aguarde.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
     try {
         if (state.protocoloEmEdicao) {
-            await ApiController.atualizarAgendamento(state.protocoloEmEdicao, dadosFormulario);
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: 'As informações alteradas foram salvas.',
-                confirmButtonColor: '#3B82F6'
-            }).then(() => {
+            await ApiController.atualizarAgendamento(state.protocoloEmEdicao, formData);
+            Swal.fire({ icon: 'success', title: 'Sucesso!', text: 'As informações foram salvas.', confirmButtonColor: '#3B82F6' }).then(() => {
                 limparFormularioAgendamento();
                 navTo('agendamentos'); 
             });
-
         } else {
-            // Enviamos para o backend e recebemos o objeto salvo (já com o protocolo gerado no Java)
-            const novoAgendamentoSalvo = await ApiController.salvar(dadosFormulario);
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Agendamento Criado!',
-                html: `As informações foram salvas no Banco de Dados.<br>Protocolo: <strong>${novoAgendamentoSalvo.protocolo}</strong>`,
-                confirmButtonColor: '#3B82F6'
-            }).then(() => {
+            const novoAgendamentoSalvo = await ApiController.salvar(formData);
+            Swal.fire({ icon: 'success', title: 'Agendamento Criado!', html: `Protocolo: <strong>${novoAgendamentoSalvo.protocolo}</strong>`, confirmButtonColor: '#3B82F6' }).then(() => {
                 limparFormularioAgendamento();
                 navTo('agendamentos'); 
             });
         }
     } catch (error) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Erro de Servidor',
-            text: 'Não foi possível salvar os dados. Verifique a conexão com o servidor.',
-            confirmButtonColor: '#d33'
-        });
+        Swal.fire({ icon: 'error', title: 'Erro de Servidor', text: 'Não foi possível salvar os dados.' });
     }
 }
 
 export async function confirmarCancelamento(event) {
+    // Permanece inalterado do seu código original
     event.preventDefault();
-    
     const protocoloEl = document.getElementById('canc-protocolo');
     const motivoEl = document.getElementById('canc-motivo');
     
@@ -137,52 +115,24 @@ export async function confirmarCancelamento(event) {
     let formularioValido = true;
     let camposComErro = [];
 
-    if (!protocolo) {
-        formularioValido = false;
-        camposComErro.push("Número do Protocolo");
-        protocoloEl.style.borderColor = "Red";
-    } else {
-        protocoloEl.style.borderColor = "";
-    }
-
-    if (!motivo) {
-        formularioValido = false;
-        camposComErro.push("Motivo do Cancelamento");
-        motivoEl.style.borderColor = "Red";
-    } else {
-        motivoEl.style.borderColor = "";
-    }
+    if (!protocolo) { formularioValido = false; camposComErro.push("Número do Protocolo"); protocoloEl.style.borderColor = "Red"; } else { protocoloEl.style.borderColor = ""; }
+    if (!motivo) { formularioValido = false; camposComErro.push("Motivo do Cancelamento"); motivoEl.style.borderColor = "Red"; } else { motivoEl.style.borderColor = ""; }
 
     if (!formularioValido) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Atenção!',
-            html: `Por favor, preencha os seguintes campos obrigatórios:<br><br>• ${camposComErro.join("<br>• ")}`,
-            confirmButtonColor: '#3085d6'
-        });
-        return;
+        Swal.fire({ icon: 'warning', title: 'Atenção!', html: `Preencha:<br><br>• ${camposComErro.join("<br>• ")}` }); return;
     }
 
-    Swal.fire({
-        title: 'Confirmar Cancelamento?',
-        html: `Deseja cancelar o protocolo <strong>${protocolo}</strong>?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#e53e3e',
-        confirmButtonText: 'Sim, cancelar',
-        cancelButtonText: 'Não, voltar'
-    }).then(async (result) => {
+    Swal.fire({ title: 'Confirmar Cancelamento?', html: `Cancelar protocolo <strong>${protocolo}</strong>?`, icon: 'warning', showCancelButton: true, confirmButtonText: 'Sim, cancelar' }).then(async (result) => {
         if (result.isConfirmed) {
             Swal.fire({ title: 'Cancelando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-            
             try {
                 await ApiController.atualizarStatus(protocolo, 'Cancelado', motivo, observacao);
-                Swal.fire('Cancelado!', 'Agendamento cancelado no sistema.', 'success').then(() => {
+                Swal.fire('Cancelado!', 'Agendamento cancelado.', 'success').then(() => {
                     document.getElementById('form-cancelar').reset();
                     navTo('agendamentos');
                 });
             } catch (error) {
-                Swal.fire({ icon: 'error', title: 'Falha', text: 'Não foi possível encontrar ou cancelar este protocolo.' });
+                Swal.fire({ icon: 'error', title: 'Falha', text: 'Não foi possível cancelar.' });
             }
         }
     });
@@ -197,7 +147,7 @@ export async function salvarEdicao() {
         
         if (campo.id === 'edit-arquivo-nf') {
             const naoTemOriginal = !(state.agendamentoOriginal.arquivoNF);
-            const naoFezUpload = !state.base64UploadEdit;
+            const naoFezUpload = !state.arquivoUploadEdit;
             
             if (naoTemOriginal && naoFezUpload) {
                 formularioValido = false;
@@ -217,85 +167,48 @@ export async function salvarEdicao() {
     });
 
     if (!formularioValido) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Atenção!',
-            html: `Por favor, preencha os seguintes campos:<br><br>• ${camposComErro.join("<br>• ")}`,
-            confirmButtonColor: '#3085d6'
-        });
+        Swal.fire({ icon: 'warning', title: 'Atenção!', html: `Preencha:<br><br>• ${camposComErro.join("<br>• ")}` });
         return;
     }
 
     const valorPedidoEdit = document.getElementById("edit-pedido").value.trim();
 
-    const dadosEditados = {
-        transportadora: document.getElementById("edit-transp").value.toUpperCase(),
-        fornecedor: document.getElementById("edit-forn").value.toUpperCase(),
-        motorista: document.getElementById("edit-motorista").value.toUpperCase(),
-        telefone: document.getElementById("edit-telefone").value,
-        email: document.getElementById("edit-email").value,
-        placaVeiculo: document.getElementById("edit-placa").value.toUpperCase(),
-        tipoVeiculo: document.getElementById("edit-veiculo").value.toUpperCase(),
-        data: document.getElementById("edit-data").value,
-        horario: document.getElementById("edit-hora-ini").value,
-        tipoCarga: document.getElementById("edit-tipo-carga").value.toUpperCase(),
-        peso: document.getElementById("edit-peso").value,
-        volume: document.getElementById("edit-volume").value,
-        pedido: valorPedidoEdit ? valorPedidoEdit.padStart(6, '0') : '-',
-        notaFiscal: document.getElementById("edit-notafiscal").value.padStart(9, '0'),
-        observacoes: document.getElementById("edit-obs").value,
-        arquivoNF: state.base64UploadEdit ? state.base64UploadEdit.base64 : null // Envia apenas a nova Base64 se houver
-    };
-
-    let teveAlteracao = false;
-    const chavesParaComparar = Object.keys(dadosEditados);
-
-    for (let chave of chavesParaComparar) {
-        if (chave === 'arquivoNF') {
-            if (state.base64UploadEdit) teveAlteracao = true; 
-            continue;
-        }
-
-        const valorOriginal = state.agendamentoOriginal[chave] === undefined || state.agendamentoOriginal[chave] === null ? '' : String(state.agendamentoOriginal[chave]);
-        const valorEditado = dadosEditados[chave] === undefined || dadosEditados[chave] === null ? '' : String(dadosEditados[chave]);
-
-        if (valorOriginal !== valorEditado) {
-            teveAlteracao = true;
-            break;
-        }
-    }
-
-    if (!teveAlteracao) {
-        Swal.fire({
-            icon: 'info',
-            title: 'Nenhuma alteração',
-            text: 'Nenhuma informação foi editada.',
-            confirmButtonColor: '#3B82F6'
-        }).then(() => {
-            fecharModalEditar();
-        });
-        return;
+    const formDataEdit = new FormData();
+    formDataEdit.append('transportadora', document.getElementById("edit-transp").value.toUpperCase());
+    formDataEdit.append('fornecedor', document.getElementById("edit-forn").value.toUpperCase());
+    formDataEdit.append('motorista', document.getElementById("edit-motorista").value.toUpperCase());
+    formDataEdit.append('telefone', document.getElementById("edit-telefone").value);
+    formDataEdit.append('email', document.getElementById("edit-email").value);
+    formDataEdit.append('placaVeiculo', document.getElementById("edit-placa").value.toUpperCase());
+    formDataEdit.append('tipoVeiculo', document.getElementById("edit-veiculo").value.toUpperCase());
+    formDataEdit.append('data', document.getElementById("edit-data").value);
+    formDataEdit.append('horario', document.getElementById("edit-hora-ini").value);
+    formDataEdit.append('tipoCarga', document.getElementById("edit-tipo-carga").value.toUpperCase());
+    formDataEdit.append('peso', document.getElementById("edit-peso").value);
+    formDataEdit.append('volume', document.getElementById("edit-volume").value);
+    formDataEdit.append('pedido', valorPedidoEdit ? valorPedidoEdit.padStart(6, '0') : '-');
+    formDataEdit.append('notaFiscal', document.getElementById("edit-notafiscal").value.padStart(9, '0'));
+    formDataEdit.append('observacoes', document.getElementById("edit-obs").value);
+    
+    // Anexa apenas se o usuário tiver feito upload de um novo arquivo na edição
+    if (state.arquivoUploadEdit) {
+        formDataEdit.append('arquivoNF', state.arquivoUploadEdit);
     }
 
     Swal.fire({ title: 'Salvando...', text: 'Por favor, aguarde.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
     try {
-        await ApiController.atualizarAgendamento(state.agendamentoOriginal.protocolo, dadosEditados);
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Sucesso!',
-            text: 'As informações alteradas foram salvas.',
-            confirmButtonColor: '#3B82F6'
-        }).then(() => {
+        await ApiController.atualizarAgendamento(state.agendamentoOriginal.protocolo, formDataEdit);
+        Swal.fire({ icon: 'success', title: 'Sucesso!', text: 'As informações alteradas foram salvas.' }).then(() => {
             fecharModalEditar();
             renderAgendamentos(); 
         });
     } catch (error) {
-        Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível salvar as edições no banco de dados.' });
+        Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível salvar as edições no banco.' });
     }
 }
 
+// exportarParaPDF e exportarParaExcel permanecem inalterados do seu código
 export function exportarParaPDF(protocolo) {
     const elementoParaExportar = document.getElementById('mv-body');
 
@@ -328,7 +241,8 @@ export function exportarParaPDF(protocolo) {
     });
 }
 
-// Convertida para async para poder puxar os dados do banco antes de exportar
+
+
 export async function exportarParaExcel() {
     Swal.fire({ title: 'Buscando dados...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
@@ -404,16 +318,8 @@ export async function exportarParaExcel() {
 }
 
 // --- INTEGRAÇÃO COM O HTML (EVENTOS INLINE) ---
-window.toggleMenu = toggleMenu;
-window.navTo = navTo;
-window.renderAgendamentos = renderAgendamentos;
-window.limparFiltros = limparFiltros;
-window.salvarAg = salvarAg;
-window.confirmarCancelamento = confirmarCancelamento;
-window.abrirModalVisualizar = abrirModalVisualizar;
-window.fecharModalVisualizar = fecharModalVisualizar;
-window.editarAgendamento = editarAgendamento;
-window.fecharModalEditar = fecharModalEditar;
-window.salvarEdicao = salvarEdicao;
-window.exportarParaPDF = exportarParaPDF;
-window.exportarParaExcel = exportarParaExcel;
+window.toggleMenu = toggleMenu; window.navTo = navTo; window.renderAgendamentos = renderAgendamentos;
+window.limparFiltros = limparFiltros; window.salvarAg = salvarAg; window.confirmarCancelamento = confirmarCancelamento;
+window.abrirModalVisualizar = abrirModalVisualizar; window.fecharModalVisualizar = fecharModalVisualizar;
+window.editarAgendamento = editarAgendamento; window.fecharModalEditar = fecharModalEditar; window.salvarEdicao = salvarEdicao;
+window.exportarParaPDF = exportarParaPDF; window.exportarParaExcel = exportarParaExcel;

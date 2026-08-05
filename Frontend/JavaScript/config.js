@@ -1,5 +1,3 @@
-// JavaScript/config.js
-
 export const CONFIG = {
     PAGE_TITLES: {
         dashboard: 'Menu Inicial',
@@ -36,10 +34,9 @@ export const CAMPOS_EDIT_OBRIGATORIOS = [
     { id: "edit-arquivo-nf", nome: "Anexo do PDF" }
 ];
 
-// Estado global compartilhado entre os arquivos
 export const state = {
     agendamentoOriginal: null,
     protocoloEmEdicao: null,
-    base64UploadAg: null,
-    base64UploadEdit: null
+    arquivoUploadAg: null, // Guardará o objeto File nativo (File)
+    arquivoUploadEdit: null // Guardará o objeto File nativo (File)
 };

@@ -47,7 +47,8 @@ export function limparFormularioAgendamento() {
         el.style.borderColor = "";
     });
 
-    state.base64UploadAg = null;
+    // Atualizado para refletir o novo formato de estado (removido o base64)
+    state.arquivoUploadAg = null;
     const infoArquivo = document.getElementById('nome-arquivo-nf');
     if (infoArquivo) infoArquivo.textContent = "Nenhum arquivo selecionado";
     document.getElementById('btn-ag-nf')?.classList.remove('btn-error-border');
@@ -70,7 +71,7 @@ export async function renderAgendamentos() {
     const divVazia = document.getElementById('ag-empty');
     if (!tbody) return;
 
-    // Conectando com a API do Java
+    // Conectando com a API
     const agendamentosSalvos = await ApiController.obterTodos();
 
     const termoBusca = document.getElementById('ag-search')?.value.toLowerCase().trim() || '';
@@ -162,11 +163,11 @@ export async function abrirModalVisualizar(protocolo) {
 
     let btnDownloadHtml = '-';
     if (ag.arquivoNF) {
-        // Trata o Base64 vindo diretamente do Java
-        const base64 = typeof ag.arquivoNF === 'string' ? ag.arquivoNF : ag.arquivoNF.base64;
+        // Agora o backend Node.js deve retornar apenas o caminho/URL do arquivo salvo
+        const urlArquivo = typeof ag.arquivoNF === 'string' ? ag.arquivoNF : ag.arquivoNF.url;
         
-        if (base64) {
-            btnDownloadHtml = `<a href="${base64}" download="Nota_Fiscal_Anexo.pdf" style="color: #3B82F6; text-decoration: underline; font-weight: bold;">📥 Baixar PDF</a>`;
+        if (urlArquivo) {
+            btnDownloadHtml = `<a href="${urlArquivo}" target="_blank" download="Nota_Fiscal_Anexo.pdf" style="color: #3B82F6; text-decoration: underline; font-weight: bold;">📥 Baixar PDF</a>`;
         }
     }
 
@@ -237,7 +238,9 @@ export async function editarAgendamento(protocolo) {
     }
 
     state.agendamentoOriginal = { ...ag };
-    state.base64UploadEdit = null;
+    
+    // Atualizado para refletir o novo formato de estado (removido o base64)
+    state.arquivoUploadEdit = null;
 
     document.getElementById("edit-transp").value = ag.transportadora || "";
     document.getElementById("edit-forn").value = ag.fornecedor || "";
@@ -278,6 +281,8 @@ export async function editarAgendamento(protocolo) {
 export function fecharModalEditar() {
     document.getElementById('modal-editar').classList.remove('open');
     state.agendamentoOriginal = null;
-    state.base64UploadEdit = null;
+    
+    // Atualizado para refletir o novo formato de estado (removido o base64)
+    state.arquivoUploadEdit = null;
     document.getElementById('edit-arquivo-nf').value = "";
 }

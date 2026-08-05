@@ -18,8 +18,9 @@ export function configurarUploadNF() {
                 
                 if (!file) {
                     if (displayEl) displayEl.textContent = "Nenhum arquivo selecionado";
-                    if (setup.isEdit) state.base64UploadEdit = null;
-                    else state.base64UploadAg = null;
+                    // Limpa o estado se o usuário cancelar a seleção
+                    if (setup.isEdit) state.arquivoUploadEdit = null;
+                    else state.arquivoUploadAg = null;
                     return;
                 }
 
@@ -30,23 +31,23 @@ export function configurarUploadNF() {
                     return;
                 }
 
-                if (file.size > 2 * 1024 * 1024) {
+                if (file.size > 2 * 1024 * 1024) { // Limite de 2MB
                     Swal.fire('Arquivo muito grande', 'O sistema suporta PDFs de até 2MB.', 'error');
                     this.value = '';
                     if (displayEl) displayEl.textContent = "Nenhum arquivo selecionado";
                     return;
                 }
 
+                // Atualiza o visual
                 if (displayEl) displayEl.innerHTML = `<span style="color: #10B981; font-weight: bold;">✓</span> ${file.name}`;
                 if (btnEl) btnEl.classList.remove('btn-error-border'); 
 
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const base64Data = { nome: file.name, base64: event.target.result };
-                    if (setup.isEdit) state.base64UploadEdit = base64Data;
-                    else state.base64UploadAg = base64Data;
-                };
-                reader.readAsDataURL(file); 
+                // Salva o arquivo bruto diretamente no estado em vez de usar FileReader/Base64
+                if (setup.isEdit) {
+                    state.arquivoUploadEdit = file;
+                } else {
+                    state.arquivoUploadAg = file;
+                }
             });
         }
     });

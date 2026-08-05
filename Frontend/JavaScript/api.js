@@ -1,4 +1,3 @@
-
 const API_BASE_URL = 'http://localhost:8080/api/agendamentos';
 
 export const ApiController = {
@@ -9,16 +8,26 @@ export const ApiController = {
             return await response.json();
         } catch (error) {
             console.error("Falha na comunicação com a API:", error);
-            return []; // Retorna array vazio para não quebrar a tela em caso de falha
+            return [];
         }
     },
     
-    salvar: async function (agendamento) {
-        const response = await fetch(API_BASE_URL, {
+    salvar: async function (dados) {
+        const isFormData = dados instanceof FormData;
+        
+        const options = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(agendamento)
-        });
+            // Se for FormData (com arquivo), envia direto. Se não, transforma em string JSON.
+            body: isFormData ? dados : JSON.stringify(dados) 
+        };
+
+        // O navegador precisa definir o cabeçalho 'multipart/form-data' sozinho.
+        // Só setamos application/json se NÃO tiver arquivo no meio.
+        if (!isFormData) {
+            options.headers = { 'Content-Type': 'application/json' };
+        }
+
+        const response = await fetch(API_BASE_URL, options);
         if (!response.ok) throw new Error('Erro ao salvar no banco de dados');
         return await response.json();
     },
@@ -35,11 +44,18 @@ export const ApiController = {
     },
     
     atualizarAgendamento: async function (protocolo, dadosAtualizados) {
-        const response = await fetch(`${API_BASE_URL}/${protocolo}`, {
+        const isFormData = dadosAtualizados instanceof FormData;
+        
+        const options = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dadosAtualizados)
-        });
+            body: isFormData ? dadosAtualizados : JSON.stringify(dadosAtualizados)
+        };
+
+        if (!isFormData) {
+            options.headers = { 'Content-Type': 'application/json' };
+        }
+
+        const response = await fetch(`${API_BASE_URL}/${protocolo}`, options);
         if (!response.ok) throw new Error('Erro ao atualizar agendamento');
         return await response.json();
     }
